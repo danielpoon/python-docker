@@ -7,6 +7,7 @@
 * The python command runs the same way, across all your directories in a terminal, just like the native 'python' command on your scripts
 * Skip the need to learn the tedious process of installing Python and its libraries
 * Built for Mac
+* Compatible with VS Code
   
 ## Quick Start
 
