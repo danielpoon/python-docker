@@ -1,0 +1,16 @@
+{
+  "name": "Python 3 Development",
+  "dockerComposeFile": "../docker-compose.yml",
+  "service": "python-app",
+  "workspaceFolder": "/home/${localEnv:USER:defaultuser}",
+  "settings": {
+    "python.defaultInterpreterPath": "/usr/local/bin/python3",
+    "python.linting.enabled": true,
+    "python.linting.pylintEnabled": true
+  },
+  "extensions": [
+    "ms-python.python",
+    "ms-vscode-remote.remote-containers",
+  ],
+  "remoteUser": "${localEnv:USER:defaultuser}"
+}

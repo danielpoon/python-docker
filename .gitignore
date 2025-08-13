@@ -1,0 +1,24 @@
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+*.egg-info/
+dist/
+build/
+*.venv/
+venv/
+env/
+
+# Docker
+.env
+*.log
+
+# VS Code
+.vscode/
+*.code-workspace
+
+# Misc
+*.swp
+*.bak
+.DS_Store

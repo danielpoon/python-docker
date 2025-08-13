@@ -1,0 +1,62 @@
+# This script replaces the 'python scriptname' command
+# to run the Python 3 inside the python-app container
+# managed by Orbstack. The function interprets the
+# relative path such that the python-app container will
+# go to the correct relative path that's mapped to the
+# physical MacOS local directory, before executing the
+# script in Python. Please not that it doesn't work
+# for other use e.g. python --version will not work.
+#
+# Copy this to ~/.zshrc in MacOS and then
+# % source ~/.zshrc
+
+export USER_UID=$(id -u)
+export USER_GID=$(id -g)
+export USERNAME=$USER
+
+python() {
+  local first_arg="$1"
+  local script_path
+  local container_path
+  local macos_home="$HOME"
+  local container_home="/home/$USER"
+
+  # Check if first argument is an option (starts with -)
+  if [[ "$first_arg" == -* ]]; then
+    # Run Python command directly in container
+    docker exec -i python-app python3 "$@"
+    return $?
+  fi
+
+  # Handle script execution (original functionality)
+  script_path="$1"
+
+  # Check if script_path is provided
+  if [[ -z "$script_path" ]]; then
+    echo "Error: Please provide a Python script path or valid option"
+    return 1
+  fi
+
+  # Convert relative path to absolute path
+  if [[ "$script_path" != /* ]]; then
+    script_path="$PWD/$script_path"
+  fi
+
+  # Check if the script is under $HOME
+  if [[ "$script_path" != $macos_home/* ]]; then
+    echo "Error: Script must be under $macos_home"
+    return 1
+  fi
+
+  # Map $HOME to $container_home
+  container_path="${script_path/$macos_home/$container_home}"
+
+  # Check if the file exists locally
+  if [[ ! -f "$script_path" ]]; then
+    echo "Error: File $script_path does not exist"
+    return 1
+  fi
+
+  # Run the script in the container
+  docker exec -i python-app python3 "$container_path" "${@:2}"
+}

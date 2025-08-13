@@ -1,0 +1,29 @@
+services:
+  python-app:
+    build:
+      context: .  # Assuming your Dockerfile is in . (current dir)
+      dockerfile: Dockerfile
+      args:
+        USERNAME: ${USERNAME:-defaultuser}
+        USER_ID: ${USER_ID:-1000}
+        GROUP_ID: ${GROUP_ID:-1000}
+    container_name: python-app
+    volumes:
+      - /Users/${USERNAME}:/home/${USERNAME}:cached  # Maps /Users/xxxx to /home/xxxx
+      - ./entrypoint.sh:/entrypoint.sh
+      - ~/.zshrc:/home/${USERNAME:-defaultuser}/.zshrc:cached
+    entrypoint: ["/entrypoint.sh"]
+    networks:
+      - myapp-network
+    command: tail -f /dev/null  # Keeps container running
+    environment:
+      - USERNAME=${USERNAME:-defaultuser}
+      - USER_ID=${USER_ID}
+      - GROUP_ID=${GROUP_ID}
+      - PYTHONPATH=/home/${USERNAME}/Documents:/home/${USERNAME}/src
+    restart: unless-stopped
+
+networks:
+  myapp-network:
+    name: myapp-network
+    external: true
