@@ -21,6 +21,10 @@
 % cp env-example .env
 ```
 * Edit the .env file ```% nano .env```
+```
+% cd ~/Documents/GitHub/python-docker
+% cp zshrc-example ~/.zshrc
+```
 * Build and start the container
 ```
 % sh ./build.sh
